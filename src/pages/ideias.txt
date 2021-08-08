@@ -1,0 +1,18 @@
+deixar a aplicação mais perfomatica em Room
+            |
+            V
+# https://firebase.google.com/docs/database/admin/retrieve-data#section-events-types
+
+
+indentificar problemas de segurança
+
+1 - ter q verificar se o user.id é igual ao room.authorId (ver se o usuario logado é igual ao usuario que criou a sala)
+
+excluir a sala após um dia
+
+react modal
+
+frame moiton
+
+===============================================================================================================
+

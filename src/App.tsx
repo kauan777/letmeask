@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
+
+import { Home } from "./pages/Home";
+import { NewRoom } from "./pages/NewRoom";
+import { Room } from './pages/Room';
+
+import {  AuthContextProvider } from './contexts/AuthContext'
+import { AdminRoom } from './pages/AdminRoom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+    <AuthContextProvider>
+      <Switch> {/*Swith não permite que eu chame duas rotas ao mesmo tempo*/}
+      <Route path="/" exact component={Home}/>
+      <Route path="/rooms/new" component={NewRoom}/>
+      <Route path="/rooms/:id" component={Room}/>
+
+      <Route path="/admin/rooms/:id" component={AdminRoom}/>
+      </Switch>  
+      </AuthContextProvider>
+    </BrowserRouter>
   );
 }
 
 export default App;
+//exportar sem o default permite exportar mais de uma coisa de um mesmo arquivo
