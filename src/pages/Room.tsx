@@ -1,31 +1,40 @@
-import { useState, FormEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, FormEvent, useContext } from 'react';
+import { useParams, useHistory} from 'react-router-dom';
 
-import logoImg from '../assets/images/logo.svg'
-
+import { PageRoom } from '../styles/room';
 import { Button } from '../components/Button';
 import { Question } from '../components/Question';
 import { RoomCode } from '../components/RoomCode';
 import { useAuth } from '../hooks/useAuth';
 import { useRoom } from '../hooks/useRoom';
 import { database } from '../services/firebase';
+import Switch from 'react-switch'
 
 
-import '../styles/room.scss'
-
+import '../styles/room.ts'
+import { ThemeContext } from 'styled-components';
 
 type RoomParams = {
     id: string;
 }
 
-export function Room(){
+interface Props {
+    toggleTheme(): void;
+}
+
+
+export function Room({toggleTheme}: Props){
     const { user } = useAuth()
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('')
     const roomId = params.id
+    const history = useHistory();
+    const {title, img} = useContext(ThemeContext)
+
+
 
     
-    const {title, questions} = useRoom(roomId)
+    const {titleRoom, questions} = useRoom(roomId)
 
     async function handleSendQuestion(event: FormEvent) {
         event.preventDefault()
@@ -37,8 +46,7 @@ export function Room(){
         if(!user){
             throw new Error('You musc be logged in')
             }            
-        
-
+    
         const question = {
             content: newQuestion,
             author: {
@@ -66,19 +74,46 @@ export function Room(){
             })
         }
     }
+
+    function HandleMenu(){
+        const menu = document.getElementById("menu")
+        menu?.classList.toggle("show")
+    }
+
+    function ReturnToLogin(){
+        history.push(`/`)
+    }
     
     return(
         
-        <div id="page-room">
+        <PageRoom id="page-room">
             <header>
                 <div className="content">
-                    <img src={logoImg} alt=""/>
-                    <RoomCode code={roomId}/>
+                    <img src={img} alt="Letmeask"/>
+                    <div id="menu" className="menu">
+                        <RoomCode code={roomId}/>
+                        <Switch
+                            className="switch"
+                            onChange ={toggleTheme}
+                            checked={title == 'dark'}
+                            checkedIcon={false}
+                            uncheckedIcon={false}
+                            height={10}
+                            width= {40}
+                            handleDiameter={20}
+                            offHandleColor="#a3a3a3"
+                            onHandleColor="#cfcfcf"
+                            offColor="#c4c4c4"
+                            onColor="#835afd"
+                    />
+                        <svg id="open" onClick ={() => HandleMenu()} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+                        <svg id="close" onClick ={() => HandleMenu()} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></svg>
+                    </div>
                 </div>
             </header>
             <main>
                 <div className="room-title">
-                    <h1>Sala {title}</h1>
+                    <h1>Sala {titleRoom}</h1>
                     {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
                 </div>
 
@@ -96,7 +131,7 @@ export function Room(){
                                 <span>{user.name}</span>
                             </div>
                         ) : (
-                        <span>Para enviar uma pergunta, <button> faça seu login</button>.</span>
+                        <span>Para enviar uma pergunta, <button onClick={ReturnToLogin}> faça seu login</button>.</span>
 
                         )}
                         <Button disabled={!user} type="submit">Enviar pergunta</Button>
@@ -131,7 +166,7 @@ export function Room(){
                     })}
                 </div>
             </main>
-        </div>
+        </PageRoom>
     
         )
 }

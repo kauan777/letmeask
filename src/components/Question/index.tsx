@@ -1,6 +1,5 @@
 import {ReactNode} from 'react'
-import './styles.scss'
-
+import { QuestionStyle } from './styles'
 
 
 type QuestionProps = {
@@ -23,7 +22,7 @@ export function Question({
 }: QuestionProps){
 
     return(
-        <div className={`question 
+        <QuestionStyle className={`question 
             ${isAnswered ? 'answered' : '' } 
             ${isHightLighted && !isAnswered ? 'highLighted' : ''} `}
         >
@@ -37,6 +36,6 @@ export function Question({
                     {children}
                 </div>
             </footer>
-        </div>
+        </QuestionStyle>
     )
 }

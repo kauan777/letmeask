@@ -32,7 +32,8 @@ type QuestionType ={
 export function useRoom(roomId: string){
     const { user } = useAuth()
     const [questions, setQuestions] = useState<QuestionType[]>([])
-    const [title, setTtile] = useState('')
+    const [titleRoom, setTtile] = useState('')
+    const [author, setAuthor] = useState('')
 
     useEffect(() =>{
         
@@ -56,6 +57,7 @@ export function useRoom(roomId: string){
 
             setTtile(databaseRoom.title)
             setQuestions(parsedQuestions ?? {})
+            setAuthor(databaseRoom.authorId)
         })
 
         return () => {
@@ -64,6 +66,6 @@ export function useRoom(roomId: string){
 
     }, [roomId, user?.id])
 
-    return { questions, title }
+    return { questions, titleRoom, author}
 
 }

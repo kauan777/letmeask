@@ -1,5 +1,5 @@
 import { Link, useHistory } from 'react-router-dom'   //substitui o href na navegação de links
-import { FormEvent,  useState} from 'react' //Tipagem para o event do form
+import { FormEvent,  useContext,  useState} from 'react' //Tipagem para o event do form
 
 import illustrationImg from '../assets/images/illustration.svg'
 import logoImg from '../assets/images/logo.svg'
@@ -7,13 +7,23 @@ import logoImg from '../assets/images/logo.svg'
 import { Button } from '../components/Button'
 import { useAuth } from '../hooks/useAuth'
 
-import '../styles/auth.scss'
+import { PageAuth } from '../styles/auth'
+
 import { database } from '../services/firebase'
 
-export function NewRoom(){
+import Switch from 'react-switch'
+import {  ThemeContext } from 'styled-components'
+
+interface Props {
+    toggleTheme(): void;
+}
+
+export function NewRoom({toggleTheme}: Props){
     const {user} = useAuth()
     const history = useHistory();
     const [ newRoom, setNewRoom] = useState("");
+    const {title, img} = useContext(ThemeContext)
+
 
     async function handleCreateRoom(event: FormEvent){ //função quando criar a sala
         event.preventDefault()
@@ -34,7 +44,23 @@ export function NewRoom(){
     }
 
     return(
-        <div id="page-auth">
+        <PageAuth>
+            <header>
+            <Switch
+                    className="switch"
+                    onChange ={toggleTheme}
+                    checked={title == 'dark'}
+                    checkedIcon={false}
+                    uncheckedIcon={false}
+                    height={10}
+                    width= {40}
+                    handleDiameter={20}
+                    offHandleColor="#a3a3a3"
+                    onHandleColor="#cfcfcf"
+                    offColor="#c4c4c4"
+                    onColor="#835afd"
+                    />
+            </header>
             <aside>
                 <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas"/>
                 <strong>Crie slas de Q&amp;A ao-vivo</strong>
@@ -42,7 +68,7 @@ export function NewRoom(){
             </aside>
             <main>
                 <div className="main-content">
-                    <img src={logoImg} alt="Letmeask"/>
+                    <img src={img} alt="Letmeask"/>
                     <h2>Criar uma nova sala</h2>
                     <form onSubmit={handleCreateRoom}>   { /* o envio é feito pelo formulario pq se o user dar um enter no submit, também funciona */ }
                         <input 
@@ -60,7 +86,7 @@ export function NewRoom(){
                     </form>
                 </div>
             </main>
-        </div>
+        </PageAuth>
     )    
 }
  

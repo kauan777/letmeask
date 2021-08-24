@@ -1,25 +1,31 @@
 
 import illustrationImg from '../assets/images/illustration.svg'
-import logoImg from '../assets/images/logo.svg'
+//import logoImg from '../assets/images/logo.svg'
+//import logoImgDark from '../assets/images/logodark.svg'
 import googleIconImg from '../assets/images/google-icon.svg'
 
 import { Button } from '../components/Button'
 
-import '../styles/auth.scss'
-
 import {useHistory} from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { FormEvent,useState } from 'react'
+import { FormEvent,useContext,useState } from 'react'
 import { database } from '../services/firebase'
 import toast, { Toaster } from 'react-hot-toast';
+import Switch from 'react-switch'
+import {  ThemeContext } from 'styled-components'
+import { PageAuth } from '../styles/auth'
 
+interface Props {
+    toggleTheme(): void;
+}
 
-export function Home(){
-    
+export function Home({toggleTheme}: Props){
+
+    const {title, img} = useContext(ThemeContext)
     const history = useHistory();
     const {user, signInWithGoogle} = useAuth()
     const [roomCode, setRoomCode] = useState("")
-
+    
     async function handleCreateRoom(){
 
         if(!user){
@@ -28,6 +34,7 @@ export function Home(){
 
         history.push('/rooms/new')
     }
+
 
     async function handleJoinRoom(event: FormEvent){
         event.preventDefault()
@@ -63,21 +70,44 @@ export function Home(){
             return;
         }
 
-        history.push(`/rooms/${roomCode}`)
+            if(user?.id == roomRef.val().authorId){
+                history.push(`/admin/rooms/${roomCode}`)
+            }
+
+            if(user?.id != roomRef.val().authorId){
+                history.push(`/rooms/${roomCode}`)
+            }
+        
     }
 
     return(
         <>
         <div><Toaster/></div>
-        <div id="page-auth">
+        <PageAuth>
+            <header>
+            <Switch
+                    className="switch"
+                    onChange ={toggleTheme}
+                    checked={title == 'dark'}
+                    checkedIcon={false}
+                    uncheckedIcon={false}
+                    height={10}
+                    width= {40}
+                    handleDiameter={20}
+                    offHandleColor="#a3a3a3"
+                    onHandleColor="#cfcfcf"
+                    offColor="#c4c4c4"
+                    onColor="#835afd"
+                    />
+            </header>
             <aside>
                 <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas"/>
-                <strong>Crie slas de Q&amp;A ao-vivo</strong>
+                <strong>Crie salas de Q&amp;A ao-vivo</strong>
                 <p>Tire as dúvidas da sua audiência em tempo-real</p>                
             </aside>
             <main>
                 <div className="main-content">
-                    <img src={logoImg} alt="Letmeask"/>
+                    <img id="logo" src={ img } alt="Letmeask"/>
                     <button  onClick={handleCreateRoom}  className="create-room">
                         <img src={googleIconImg} alt="Icone do Google"/>
                         Crie sua sala com o Google
@@ -96,7 +126,7 @@ export function Home(){
                     </form>
                 </div>
             </main>
-        </div>
-        </>
+        </PageAuth>
+    </>
     )    
 }

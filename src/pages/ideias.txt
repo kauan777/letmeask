@@ -6,13 +6,17 @@ deixar a aplicação mais perfomatica em Room
 
 indentificar problemas de segurança
 
-1 - ter q verificar se o user.id é igual ao room.authorId (ver se o usuario logado é igual ao usuario que criou a sala)
-
 excluir a sala após um dia
-
-react modal
 
 frame moiton
 
 ===============================================================================================================
 
+Funcionalidades adicionadas
+
+
+1 - Ter que verificar se o user.id é igual ao room.authorId (ver se o usuario logado é igual ao usuario que criou a sala)
+
+2- função para o botão que teria que voltar para tela de login usando useHistory
+
+3- Não permitir que o usuario tenha o a função do Admin se a sala não for dele
