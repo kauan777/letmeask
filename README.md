@@ -86,7 +86,7 @@ Este projeto esta sob a [MIT license](LICENSE) para mais detalhes.
 
 ## :wave: Social
 
-Siga @EddyPBR nas redes :wink:
+Me siga nas redes :wink:
 <br />
 
 - [Instagram](https://www.instagram.com/ikauan.costa/)
