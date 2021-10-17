@@ -3,7 +3,7 @@
 <h1 align="center">
   <br />
   <br />
-  ReactJS| Firebase | Typescript
+  ReactJS | Firebase | Typescript
 </h1>
 
 <p align="center">
